@@ -80,6 +80,7 @@ class OA(object):
         self._create_folder_structure()
         self._clear_previous_executions()        
         self._add_ipynb()  
+        self._ingest_summary()
         self._get_flow_results()
         self._add_network_context()
         self._add_geo_localization()
@@ -447,7 +448,7 @@ class OA(object):
                 AND cast(treceived as timestamp) IS NOT NULL
                 GROUP BY tryear, trmonth, trday, trhour, trminute;
         """).format(self._db,self._table_name, yr, mn, dy)
-        
+        self._logger.info(query_to_load)
         results = impala.execute_query(query_to_load) 
  
         if results:
@@ -460,13 +461,19 @@ class OA(object):
 
             sf = df_new.groupby(by=['date'])['total'].sum()
             df_per_min = pd.DataFrame({'date':sf.index, 'total':sf.values})
-            
-            df_final = df_filtered.append(df_per_min, ignore_index=True).to_records(False,False) 
+            self._logger.info("============================")
+            from tabulate import tabulate
+            self._logger.info(tabulate(df_filtered, headers='keys', tablefmt='psql'))
+
+            df_final = df_filtered.append(df_per_min, ignore_index=True).dropna(how='all').to_records(False,False) 
+            self._logger.info("DF Final: {0}".format(df_final))
             if len(df_final) > 0:
+                self._logger.info("tuple: {0}".format(tuple(df_final)))
+                values = '(' + ",".join("{}".format(v) for v in df_final) + ')'
                 query_to_insert=("""
                     INSERT INTO {0}.flow_ingest_summary PARTITION (y={1}, m={2}, d={3}) VALUES {4};
-                """).format(self._db, yr, mn, dy, tuple(df_final))
-
+                """).format(self._db, yr, mn, dy, values)
+                self._logger.info("query to insert: {}".format(query_to_insert))
                 impala.execute_query(query_to_insert)
                 
         else:

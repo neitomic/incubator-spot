@@ -2,7 +2,7 @@
     "oa_data_engine":"impala",
     
     "impala":{
-        "impala_daemon":"node"
+        "impala_daemon":"Ubuntu-1804-bionic-64-minimal"
     },
     "hive":{}
 }

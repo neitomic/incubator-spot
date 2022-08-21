@@ -41,7 +41,7 @@ object InputOutputDataHandler {
       logger.info("Loading data from: " + inputPath)
       Some(sparkSession.read.parquet(inputPath))
     } catch {
-      case _: Throwable => None
+      case e: Throwable => throw e
     }
   }
 

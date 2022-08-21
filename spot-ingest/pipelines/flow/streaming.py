@@ -20,7 +20,11 @@
 '''
 
 import datetime
+import logging
 
+def show(x):
+    print(x)
+    return x
 
 class StreamPipeline:
     '''
@@ -47,6 +51,7 @@ class StreamPipeline:
         :class:`pyspark.sql.types.StructType`.
         '''
         return self.__dstream\
+                .map(lambda x: show(x))\
                 .map(lambda x: x[1])\
                 .flatMap(lambda x: x)\
                 .map(lambda x: x.split(','))
@@ -112,6 +117,8 @@ class StreamPipeline:
         :returns     : A list of typecast-ed fields, according to the table's schema.
         :rtype       : ``list``
         '''
+
+        print ("parsing message: {0}".format(fields))
         unix_tstamp = datetime.datetime.strptime(fields[0], '%Y-%m-%d %H:%M:%S')\
                         .strftime('%s')
         return [

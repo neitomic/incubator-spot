@@ -26,7 +26,7 @@ import sys
 import tempfile
 
 from common.utils import Util
-from datetime     import datetime
+from datetime     import datetime, timedelta
 
 COMMAND = 'nfdump -r {0} -o csv {1} > {2}'
 EPOCH   = datetime(1970, 1, 1)
@@ -104,7 +104,7 @@ def prepare(csvfile, max_req_size):
             msg_list  = [value]
             msg_size  = size
             partition = match.group()[:13]
-            timestamp = datetime.strptime(match.group(), '%Y-%m-%d %H:%M:%S') - EPOCH
+            timestamp = (datetime.strptime(match.group(), '%Y-%m-%d %H:%M:%S') - EPOCH) + timedelta(hours=1)
 
     # .................................send the last lines from the file. The check of
     # `timestamp` is in case the file is empty and `timestamp` is still ``None``

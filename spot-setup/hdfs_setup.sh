@@ -46,7 +46,7 @@ function safe_mkdir() {
             log "${dir} already exists"
         else
             log "running mkdir on ${dir}"
-            ${hdfs_cmd} dfs -mkdir "${dir}"
+            ${hdfs_cmd} dfs -mkdir -p "${dir}"
         fi
 }
 
@@ -120,7 +120,7 @@ fi
 
 case ${DBENGINE} in
     impala)
-        db_shell="impala-shell -i ${IMPALA_DEM}"
+        db_shell="impala-shell.sh -i ${IMPALA_DEM}"
         if [[ ${KERBEROS} == "true" ]]; then
             db_shell="${db_shell} -k"
         fi
