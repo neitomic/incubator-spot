@@ -106,17 +106,17 @@ class OA(object):
 
         for path in table_schema:
             folder = "{0}/{1}/hive/oa/{2}/y={3}/m={4}/d={5}".format(HUSER,self._table_name,path,yr,int(mn),int(dy))
-            result = HDFSClient.delete_folder(folder,user="impala")
+            result = Util.delete_folder(folder)
             self._logger.info("Delete previous execution dir {0}: {1}".format(folder, result))
 
         impala.execute_query("invalidate metadata")
         #removes Feedback file
         feedback_path = "{0}/{1}/scored_results/{2}{3}{4}/feedback/ml_feedback.csv".format(HUSER,self._table_name,yr,mn,dy)
-        feedback_delete_result = HDFSClient.delete_folder(feedback_path)
+        feedback_delete_result = Util.hdfs_delete(feedback_path)
         self._logger.info("Delete previous ml feedback {0}: {1}".format(feedback_path, feedback_delete_result))
         #removes json files from the storyboard
         storyboard_path = "{0}/{1}/oa/{2}/{3}/{4}/{5}".format(HUSER,self._table_name,"storyboard",yr,mn,dy)
-        storyboard_delete_result = HDFSClient.delete_folder(storyboard_path)
+        storyboard_delete_result = Util.hdfs_delete(storyboard_path)
         self._logger.info("Delete previous storeyboard {0}: {1}".format(storyboard_path, storyboard_delete_result))
 
     def _create_folder_structure(self):   
