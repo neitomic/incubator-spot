@@ -106,7 +106,7 @@ class OA(object):
 
         for path in table_schema:
             folder = "{0}/{1}/hive/oa/{2}/y={3}/m={4}/d={5}".format(HUSER,self._table_name,path,yr,int(mn),int(dy))
-            result = Util.delete_folder(folder)
+            result = Util.hdfs_delete(folder)
             self._logger.info("Delete previous execution dir {0}: {1}".format(folder, result))
 
         impala.execute_query("invalidate metadata")
