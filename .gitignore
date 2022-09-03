@@ -13,3 +13,4 @@ logs/
 .bsp
 spot-ml/top-1m/
 *.csv
+.DS_Store
