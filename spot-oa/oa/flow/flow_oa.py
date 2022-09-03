@@ -80,7 +80,6 @@ class OA(object):
         self._create_folder_structure()
         self._clear_previous_executions()        
         self._add_ipynb()  
-        self._ingest_summary()
         self._get_flow_results()
         self._add_network_context()
         self._add_geo_localization()
@@ -99,8 +98,8 @@ class OA(object):
         
         self._logger.info("Cleaning data from previous executions for the day")       
         yr = self._date[:4]
-        mn = self._date[4:6]
-        dy = self._date[6:]  
+        mn = int(self._date[4:6])
+        dy = int(self._date[6:])
         table_schema = []
         HUSER = self._spot_conf.get('conf', 'HUSER').replace("'", "").replace('"', '')
         table_schema=['suspicious', 'edge','chords','threat_investigation', 'timeline', 'storyboard', 'summary' ] 
