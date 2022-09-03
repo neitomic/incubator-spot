@@ -415,7 +415,8 @@ class OA(object):
         df_final = df_filtered.append(df_per_min, ignore_index=True).to_records(False,False)
 
         if len(df_final) > 0:
+            values = '(' + ",".join("{}".format(v) for v in df_final) + ')'
             query_to_insert=("""
                 INSERT INTO {0}.dns_ingest_summary PARTITION (y={1}, m={2}, d={3}) VALUES {4};
-            """).format(self._db, yr, mn, dy, tuple(df_final))
+            """).format(self._db, yr, mn, dy, values)
             impala.execute_query(query_to_insert)

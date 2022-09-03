@@ -112,7 +112,10 @@ class Util(object):
         _stdout  = [x for x in parser(out) if bool(x)]
         _stderr  = [x for x in parser(err) if bool(x)]
 
-        if _stderr and raises:
+        if _stderr:
+            logging.warning(_stderr)
+
+        if process.returncode != 0 and raises:
             raise OSError('\n'.join(_stderr))
 
         return _stdout, _stderr
