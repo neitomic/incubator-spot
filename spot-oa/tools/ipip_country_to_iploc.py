@@ -62,7 +62,7 @@ if __name__ == '__main__':
                             net = IPv4Network(unicode(line.strip()))
                             ip_start = ip_to_int(str(net[0]))
                             ip_end = ip_to_int(str(net[net.num_addresses - 1]))
-                            dst.write(','.join([str(ip_start), str(ip_end), country_code, country_name, '', '', '0', '0', 'unknown', 'unknown']))
+                            dst.write(','.join([str(ip_start), str(ip_end), country_code, country_name, country_code, country_name, '0', '0', 'unknown', 'unknown']))
                             dst.write("\n")
 
     except SystemExit:
