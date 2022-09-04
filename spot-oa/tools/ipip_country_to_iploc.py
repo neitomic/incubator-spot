@@ -32,10 +32,14 @@ def ip_to_int(ip_str):
 
 
 if __name__ == '__main__':
+    import numpy as np
+
     try:
         args = _parse_args()
         src_dir = args.src_dir
         dst_file = args.dst_file
+
+        result = np.empty([0, 10])
 
         from os import listdir
         from os.path import isfile, join
@@ -44,26 +48,33 @@ if __name__ == '__main__':
         from ipaddress import IPv4Network
         from data import countries
 
-        with open(dst_file, 'w') as dst:
+        for f in files:
+            m = FILE_PATTERN.match(f)
+            if not m:
+                print "Ignore file {} as it not match pattern".format(f)
+                continue
+            country_code = m.group(1).upper()
+            country_name = countries.get(country_code, 'unknown')
+            print "Processing file {0} with country code: {1}".format(f, country_code)
+            with open(join(src_dir, f)) as read:
+                lines = read.readlines()
+                for line in lines:
+                    ip_match = IP_PATTERN.match(line.strip())
+                    if ip_match:
+                        net = IPv4Network(unicode(line.strip()))
+                        ip_start = ip_to_int(str(net[0]))
+                        ip_end = ip_to_int(str(net[net.num_addresses - 1]))
 
-            for f in files:
-                m = FILE_PATTERN.match(f)
-                if not m:
-                    print "Ignore file {} as it not match pattern".format(f)
-                    continue
-                country_code = m.group(1).upper()
-                country_name = countries.get(country_code, 'unknown')
-                print "Processing file {0} with country code: {1}".format(f, country_code)
-                with open(join(src_dir, f)) as read:
-                    lines = read.readlines()
-                    for line in lines:
-                        ip_match = IP_PATTERN.match(line.strip())
-                        if ip_match:
-                            net = IPv4Network(unicode(line.strip()))
-                            ip_start = ip_to_int(str(net[0]))
-                            ip_end = ip_to_int(str(net[net.num_addresses - 1]))
-                            dst.write(','.join([str(ip_start), str(ip_end), country_code, country_name, country_code, country_name, '0', '0', 'unknown', 'unknown']))
-                            dst.write("\n")
+                        result = np.append(result, np.array(
+                            [[ip_start, ip_end, country_code, country_name, country_code, country_name,
+                              '0', '0', 'unknown', 'unknown']]), axis=0)
+        result = sorted(result, key=lambda entry: entry[1])
+
+        with open(dst_file, "w") as w:
+            for e in result:
+                w.write(",".join(e))
+                w.write("\n")
+
 
     except SystemExit:
         raise
