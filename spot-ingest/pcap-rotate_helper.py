@@ -53,6 +53,9 @@ class PCAPRotateHelper:
                         print "copy file {} -> {}".format(previous_file, dst_file)
                         copyfile(previous_file, dst_file)
 
+                import time
+                time.sleep(2)
+
         except KeyboardInterrupt:
             pass
         finally:
