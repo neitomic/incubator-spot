@@ -53,6 +53,13 @@ class PCAPRotateHelper:
                         print "copy file {} -> {}".format(previous_file, dst_file)
                         copyfile(previous_file, dst_file)
 
+                        print "trying to find older file to clean up"
+                        to_delete_file_name = self.find_previous_file(previous_filename)
+                        to_delete_file = os.path.join(dirname(_file), to_delete_file_name)
+                        if os.path.isfile(to_delete_file):
+                            print "deleting old file: {}".format(to_delete_file)
+                            os.remove(to_delete_file)
+
                 import time
                 time.sleep(2)
 
@@ -68,7 +75,8 @@ class PCAPRotateHelper:
             previous_counter = int(match.group(2)) - 1
             last_time = datetime.strptime(match.group(3), '%Y%m%d%H%M%S') - timedelta(seconds=self._windows_sec)
             if previous_counter >= 0:
-                return "{}_{}_{}.pcap".format(match.group(1), str(previous_counter).zfill(5), last_time.strftime("%Y%m%d%H%M%S"))
+                return "{}_{}_{}.pcap".format(match.group(1), str(previous_counter).zfill(5),
+                                              last_time.strftime("%Y%m%d%H%M%S"))
 
         return None
 
@@ -101,14 +109,14 @@ def _parse_args():
 
     # .................................state optional arguments
     required.add_argument('-s', '--src-dir',
-                        help='source directory',
-                        metavar='')
+                          help='source directory',
+                          metavar='')
     required.add_argument('-d', '--dst-dir',
-                        help='destination directory',
-                        metavar='')
+                          help='destination directory',
+                          metavar='')
     required.add_argument('-w', '--windows-sec',
-                        help='rotate windows second',
-                        metavar='')
+                          help='rotate windows second',
+                          metavar='')
 
     parser.add_argument('-l', '--log-level',
                         default='INFO',
@@ -120,4 +128,3 @@ def _parse_args():
 
 if __name__ == '__main__':
     PCAPRotateHelper.run()
-
