@@ -1,10 +1,9 @@
 import re
 from argparse import ArgumentParser
 import sys
+from utils import IP_PATTERN, ip_to_int
 
 FILE_PATTERN = re.compile(r'ipip_country_(\w+).netset')
-IP_PATTERN = re.compile(
-    r'^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)(\/\d+)?$')
 
 
 def _parse_args():
@@ -24,11 +23,6 @@ def _parse_args():
                           help='destination file',
                           metavar='')
     return parser.parse_args()
-
-
-def ip_to_int(ip_str):
-    octets = ip_str.split('.')
-    return int(octets[0]) * 16777216 + int(octets[1]) * 65536 + int(octets[2]) * 256 + int(octets[3])
 
 
 if __name__ == '__main__':
