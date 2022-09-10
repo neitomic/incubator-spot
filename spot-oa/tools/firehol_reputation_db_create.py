@@ -27,7 +27,7 @@ def _parse_args():
 
 
 def load_firehol_data_into_db(connection, table, firehol_file):
-    insert_query = "INSERT INTO {} (ip) values(?)".format(table)
+    insert_query = "INSERT INTO {} (ip_start, ip_end) values(?, ?)".format(table)
     count = 0
     with open(firehol_file) as read:
         lines = read.readlines()
@@ -35,9 +35,10 @@ def load_firehol_data_into_db(connection, table, firehol_file):
             ip_match = IP_PATTERN.match(line.strip())
             if ip_match:
                 net = IPv4Network(unicode(line.strip()))
-                ips = [ip_to_int(ip) for ip in net]
-                count += len(ips)
-                connection.executemany(insert_query, ips)
+                ip_start = ip_to_int(str(net[0]))
+                ip_end = ip_to_int(str(net[net.num_addresses - 1]))
+                connection.execute(insert_query, (ip_start, ip_end))
+                count += 1
 
     return count
 
@@ -53,17 +54,27 @@ if __name__ == '__main__':
 
         conn = sl.connect(db_file)
         with conn:
-            conn.execute("CREATE TABLE IF NOT EXISTS suspicious(ip INTEGER NOT NULL PRIMARY KEY);")
+            conn.execute(
+                "CREATE TABLE IF NOT EXISTS suspicious(ip_start INTEGER, ip_end INTEGER, PRIMARY KEY (ip_start, ip_end));")
             conn.execute("DELETE FROM suspicious;")
-            conn.execute("CREATE TABLE IF NOT EXISTS malicious(ip INTEGER NOT NULL PRIMARY KEY);")
+
+            conn.execute(
+                "CREATE TABLE IF NOT EXISTS malicious( ip_start INTEGER, ip_end INTEGER, PRIMARY KEY (ip_start, ip_end));")
             conn.execute("DELETE FROM malicious;")
 
             for malicious_dataset in malicious_datasets:
                 f = join(firehol_dir, malicious_dataset)
                 if isfile(f):
                     print "Loading malicious_dataset into malicious table"
-                    count = load_firehol_data_into_db(conn, "malicious", f)
-                    print "Done with {} ip address".format(count)
+                    subnet_count = load_firehol_data_into_db(conn, "malicious", f)
+                    print "Done with {} subnets".format(subnet_count)
+
+            for suspicious_dataset in suspicious_datasets:
+                f = join(firehol_dir, suspicious_dataset)
+                if isfile(f):
+                    print "Loading suspicious_dataset into suspicious table"
+                    subnet_count = load_firehol_data_into_db(conn, "suspicious", f)
+                    print "Done with {} subnets".format(subnet_count)
 
 
     except SystemExit:
