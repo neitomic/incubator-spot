@@ -17,6 +17,7 @@
 
 import logging
 import sqlite3 as sl
+from utils import Util
 
 
 class Reputation(object):
