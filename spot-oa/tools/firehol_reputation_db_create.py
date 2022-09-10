@@ -27,7 +27,7 @@ def _parse_args():
 
 
 def load_firehol_data_into_db(connection, table, firehol_file):
-    insert_query = "INSERT INTO {} (ip_start, ip_end) values(?, ?)".format(table)
+    insert_query = "INSERT OR IGNORE INTO {} (ip_start, ip_end) values(?, ?)".format(table)
     count = 0
     with open(firehol_file) as read:
         lines = read.readlines()
