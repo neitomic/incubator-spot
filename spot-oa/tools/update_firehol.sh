@@ -2,7 +2,7 @@
 export IMPALA_HOME=/opt/impala
 export KAFKA_HOME=/opt/kafka
 export SPARK_HOME=/opt/spark
-export PATH="$PATH:$KAFKA_HOME/bin:$SPARK_HOME/bin"
+export PATH="$PATH:$KAFKA_HOME/bin:$SPARK_HOME/bin:/usr/sbin"
 
 # activating environment
 source /opt/impala/bin/impala-config.sh
