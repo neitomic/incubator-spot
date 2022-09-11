@@ -1,6 +1,7 @@
 #!/bin/bash -e
 
 data_type=$1
+data_date=$2
 
 export IMPALA_HOME=/opt/impala
 export KAFKA_HOME=/opt/kafka
@@ -13,7 +14,11 @@ source /opt/incubator-spot/spot-ingest/venv/bin/activate
 
 SPOT_HOME=/opt/incubator-spot
 
-data_date=$(date -d "-10 min" "+%Y%m%d")
+if [ -z "$data_date" ]; then
+  echo "Data date is not set, calculate current data_date"; 
+  data_date=$(date -d "-10 min" "+%Y%m%d")
+fi
+
 echo "Running operator for $data_type on $data_date"
 
 cd $SPOT_HOME/spot-ml
