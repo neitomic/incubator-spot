@@ -89,6 +89,12 @@ class Util(object):
         return get_results_cmd
 
     @classmethod
+    def hdfs_delete(cls, hdfs_path):
+        delete_cmd = "hadoop fs -rm -r -f -skipTrash {0}".format(hdfs_path)
+        subprocess.call(delete_cmd, shell=True)
+        return delete_cmd
+
+    @classmethod
     def read_results(cls, file, limit, delimiter=','):
 
         # read csv results.

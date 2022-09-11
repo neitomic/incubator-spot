@@ -20,6 +20,13 @@
 '''
 
 import datetime
+import logging
+from nfdump_schema import spot_nfdump_fields, nfdump_fields
+
+
+def show(x):
+    print(x)
+    return x
 
 
 class StreamPipeline:
@@ -34,11 +41,11 @@ class StreamPipeline:
     '''
 
     def __init__(self, ssc, zkQuorum, groupId, topics):
-        from common.serializer       import deserialize
+        from common.serializer import deserialize
         from pyspark.streaming.kafka import KafkaUtils
 
         self.__dstream = KafkaUtils.createStream(ssc, zkQuorum, groupId, topics,
-                        keyDecoder=lambda x: x, valueDecoder=deserialize)
+                                                 keyDecoder=lambda x: x, valueDecoder=deserialize)
 
     @property
     def dstream(self):
@@ -46,10 +53,11 @@ class StreamPipeline:
             Return the schema of this :class:`DataFrame` as a
         :class:`pyspark.sql.types.StructType`.
         '''
-        return self.__dstream\
-                .map(lambda x: x[1])\
-                .flatMap(lambda x: x)\
-                .map(lambda x: x.split(','))
+        return self.__dstream \
+            .map(lambda x: show(x)) \
+            .map(lambda x: x[1]) \
+            .flatMap(lambda x: x) \
+            .map(lambda x: x.split(','))
 
     @property
     def schema(self):
@@ -112,39 +120,54 @@ class StreamPipeline:
         :returns     : A list of typecast-ed fields, according to the table's schema.
         :rtype       : ``list``
         '''
-        unix_tstamp = datetime.datetime.strptime(fields[0], '%Y-%m-%d %H:%M:%S')\
-                        .strftime('%s')
+
+        print ("parsing message: {0}".format(fields))
+        date = datetime.datetime.strptime(fields[0], '%Y-%m-%d %H:%M:%S')
+        year = date.year
+        month = date.month
+        day = date.day
+        hour = date.hour
+        minute = date.minute
+        second = date.second
+
+        unix_tstamp = date.strftime('%s')
+
+        if len(fields) > 30:
+            field_index = nfdump_fields
+        else:
+            field_index = spot_nfdump_fields
+
         return [
             fields[0],
             long(unix_tstamp),
-            int(fields[1]),
-            int(fields[2]),
-            int(fields[3]),
-            int(fields[4]),
-            int(fields[5]),
-            int(fields[6]),
-            float(fields[7]),
-            fields[8],
-            fields[9],
-            int(fields[10]),
-            int(fields[11]),
-            fields[12],
-            fields[13],
-            int(fields[14]),
-            int(fields[15]),
-            long(fields[16]),
-            long(fields[17]),
-            long(fields[18]),
-            long(fields[19]),
-            int(fields[20]),
-            int(fields[21]),
-            int(fields[22]),
-            int(fields[23]),
-            int(fields[24]),
-            int(fields[25]),
-            fields[26],
-            int(fields[1]),
-            int(fields[2]),
-            int(fields[3]),
-            int(fields[4]),
+            year,
+            month,
+            day,
+            hour,
+            minute,
+            second,
+            float(fields[field_index['td']]),
+            fields[field_index['sa']],
+            fields[field_index['da']],
+            int(fields[field_index['sp']]),
+            int(fields[field_index['dp']]),
+            fields[field_index['pr']],
+            fields[field_index['flg']],
+            int(fields[field_index['fwd']]),
+            int(fields[field_index['stos']]),
+            long(fields[field_index['ipkt']]),
+            long(fields[field_index['ibyt']]),
+            long(fields[field_index['opkt']]),
+            long(fields[field_index['obyt']]),
+            int(fields[field_index['in']]),
+            int(fields[field_index['out']]),
+            int(fields[field_index['sas']]),
+            int(fields[field_index['das']]),
+            int(fields[field_index['dtos']]),
+            int(fields[field_index['dir']]),
+            fields[field_index['ra']],
+            int(year),
+            int(month),
+            int(day),
+            int(hour),
         ]

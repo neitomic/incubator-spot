@@ -14,6 +14,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+import logging
+
 from impala.dbapi import connect
 import api.resources.configurator as config
 
@@ -43,7 +45,7 @@ def create_connection():
 
 
 def execute_query(query,fetch=False):
-
+    logging.getLogger("IMPALA.ENGINE").info("Execute query: {}".format(query))
     impala_cursor = create_connection()
     impala_cursor.execute(query)
 

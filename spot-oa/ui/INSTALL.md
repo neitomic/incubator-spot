@@ -1,6 +1,6 @@
-# Apache Spot (incubating) - Installation Guide
+# Knogin Hunter (incubating) - Installation Guide
 
-Apache Spot - User Interface (aka Spot UI or UI) Provides tools for interactive visualization, noise filters, white listing, and attack heuristics.
+Knogin Hunter - User Interface (aka Spot UI or UI) Provides tools for interactive visualization, noise filters, white listing, and attack heuristics.
 
 Here you will find instructions to get Spot UI up and running. For more information about Spot look [here](../../).
 

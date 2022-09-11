@@ -73,6 +73,13 @@ def main():
     '''
         Main entry point for Spark Streaming Listener functionality.
     '''
+    
+    import sys
+    print ("=================================")
+    print  (sys.argv[1:])
+    print ("=================================")
+
+
     try: streaming_listener(**parse_args().__dict__)
     except SystemExit: raise
     except:
@@ -132,6 +139,10 @@ def parse_args():
 
     return parser.parse_args()
 
+def show(x):
+    print x
+
+
 def store(rdd, hsc, dbtable, topic, schema=None, segtype='segments'):
     '''
         Interface for saving the content of the streaming :class:`DataFrame` out into
@@ -146,10 +157,13 @@ def store(rdd, hsc, dbtable, topic, schema=None, segtype='segments'):
     :param segtype: The type of the received segments.
     '''
     logger = logging.getLogger('SPOT.INGEST.COMMON.LISTENER')
+    logger.info("----- rdd size: {0}".format(rdd.count()))
 
     if rdd.isEmpty():
         logger.info(' ---- LISTENING KAFKA TOPIC: {0} ---- '.format(topic))
         return
+
+    rdd.foreach(show)
 
     hsc.setConf('hive.exec.dynamic.partition', 'true')
     hsc.setConf('hive.exec.dynamic.partition.mode', 'nonstrict')

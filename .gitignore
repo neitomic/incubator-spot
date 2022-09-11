@@ -1,3 +1,16 @@
 *.iml
 .idea/
 target/
+*.pyc
+spot-ingest/venv/
+spot-ingest/build/
+*.bundle.min.js
+node_modules/
+dist/
+logs/
+*.out
+*.jar
+.bsp
+spot-ml/top-1m/
+*.csv
+.DS_Store

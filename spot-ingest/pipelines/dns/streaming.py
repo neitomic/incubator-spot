@@ -94,21 +94,23 @@ class StreamPipeline:
         :returns     : A list of typecast-ed fields, according to the table's schema.
         :rtype       : ``list``
         '''
-        dt = datetime.datetime.fromtimestamp(float(fields[2]))
-
-        return [
-            '{0}, {1}'.format(fields[0], fields[1]),
-            long(float(fields[2])),
-            int(fields[3]),
-            fields[5],
-            fields[4],
-            fields[6],
-            fields[8],
-            int(fields[7]),
-            int(fields[9]),
-            fields[10],
-            dt.year,
-            dt.month,
-            dt.day,
-            dt.hour
-        ]
+        try:
+            dt = datetime.datetime.fromtimestamp(float(fields[2]))
+            return [
+                '{0}, {1}'.format(fields[0], fields[1]),
+                long(float(fields[2])),
+                int(fields[3]),
+                fields[5],
+                fields[4],
+                fields[6],
+                fields[8],
+                int(fields[7]),
+                int(fields[9]),
+                fields[10],
+                dt.year,
+                dt.month,
+                dt.day,
+                dt.hour
+            ]
+        except Exception as e:
+            return None

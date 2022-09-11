@@ -75,6 +75,7 @@ def prepare(csvfile, max_req_size):
     logger    = logging.getLogger('SPOT.INGEST.DNS.PROCESS')
     partition = timestamp = None
     pattern   = re.compile('[0-9]{10}.[0-9]{9}')
+    print "Processing csv file: {}".format(csvfile)
 
     with open(csvfile, 'r') as fp:
         for line in fp:
@@ -113,5 +114,7 @@ def prepare(csvfile, max_req_size):
 
     logger.debug('Yield segment-{0}: {1} lines, {2} bytes'.format(segmentid,
         len(msg_list), msg_size))
+
+    print 'Yield segment-{0}: {1} lines, {2} bytes'.format(segmentid, len(msg_list), msg_size)
 
     yield (int(timestamp.total_seconds() * 1000), msg_list)

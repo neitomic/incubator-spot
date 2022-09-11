@@ -57,7 +57,7 @@ class SecureKerberosClient(KerberosClient):
 
     """
 
-    def __init__(self, url, mutual_auth, cert=None, verify='true', **kwargs):
+    def __init__(self, url, mutual_auth='OPTIONAL', cert=None, verify='true', **kwargs):
 
         self._logger = logging.getLogger("SPOT.INGEST.HDFS_client")
         session = Session()

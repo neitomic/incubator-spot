@@ -26,6 +26,10 @@ YR=${FDATE:0:4}
 MH=${FDATE:4:2}
 DY=${FDATE:6:2}
 
+# trim 0 since hive table data dir is formated without leading 0
+MH=$(echo $MH | sed 's/^0*//')
+DY=$(echo $DY | sed 's/^0*//')
+
 if [[ "${#FDATE}" != "8" || -z "${DSOURCE}" ]]; then
     echo "ml_ops.sh syntax error"
     echo "Please run ml_ops.sh again with the correct syntax:"
@@ -79,12 +83,11 @@ hdfs dfs -rm -R -f ${HDFS_SCORED_CONNECTS}
 time spark-submit --class "org.apache.spot.SuspiciousConnects" \
   --master yarn \
   --driver-memory ${SPK_DRIVER_MEM} \
+  --executor-cores ${SPK_EXEC_CORES} \
+  --num-executors ${SPK_EXEC} \
+  --executor-memory ${SPK_EXEC_MEM} \
   --conf spark.driver.maxResultSize=${SPK_DRIVER_MAX_RESULTS} \
   --conf spark.driver.maxPermSize=512m \
-  --conf spark.dynamicAllocation.enabled=true \
-  --conf spark.dynamicAllocation.maxExecutors=${SPK_EXEC} \
-  --conf spark.executor.cores=${SPK_EXEC_CORES} \
-  --conf spark.executor.memory=${SPK_EXEC_MEM} \
   --conf spark.sql.autoBroadcastJoinThreshold=${SPK_AUTO_BRDCST_JOIN_THR} \
   --conf "spark.executor.extraJavaOptions=-XX:MaxPermSize=512M -XX:PermSize=512M" \
   --conf spark.kryoserializer.buffer.max=512m \

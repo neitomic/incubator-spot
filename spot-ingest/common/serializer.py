@@ -47,11 +47,13 @@ def deserialize(rawbytes):
     :returns       : List of ``str`` objects, extracted from the binary stream.
     :rtype         : ``list``
     '''
+    print "deserialize..... {0}".format(rawbytes)
     decoder = avro.io.BinaryDecoder(io.BytesIO(rawbytes))
     reader  = avro.io.DatumReader(avro.schema.parse(AVSC))
 
     try: return reader.read(decoder)[list.__name__]
     except Exception as exc:
+        print '[{0}] {1}'.format(exc.__class__.__name__, exc.message)
         logging.getLogger('SPOT.INGEST.COMMON.SERIALIZER')\
             .error('[{0}] {1}'.format(exc.__class__.__name__, exc.message))
 
@@ -72,8 +74,8 @@ def serialize(value):
         writer.write({ list.__name__: value }, avro.io.BinaryEncoder(rawbytes))
         return rawbytes
     except avro.io.AvroTypeException:
-        logging.getLogger('SPOT.INGEST.COMMON.SERIALIZER')\
-            .error('The type of ``{0}`` is not supported by the Avro schema.'
-            .format(type(value).__name__))
+        logger = logging.getLogger('SPOT.INGEST.COMMON.SERIALIZER')
+        logger.error('The type of ``{0}`` is not supported by the Avro schema.'.format(type(value).__name__))
+        logger.exception("Exception in Avro serializer")
 
     return None

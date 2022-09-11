@@ -37,7 +37,11 @@ def spark_job(script_file, **kwargs):
     spark_job  = 'spark2-submit --master {0}'.format(kwargs.pop('master'))
     spark_job += ' --deploy-mode {0}'.format(kwargs.pop('deploy_mode'))
     spark_job += ' --py-files {0}'.format(kwargs.pop('py_files'))
+    spark_job += ' --jars /opt/incubator-spot/spot-ingest/common/spark-streaming-kafka-0-8-assembly_2.11-2.4.8.jar'
 
+    spark_job += ' --conf spark.eventLog.enabled=true'
+    spark_job += ' --conf spark.eventLog.dir=/opt/spark/logs'
+    
     if 'driver_memory' in kwargs.keys():
         spark_job += ' --driver-memory {0}'.format(kwargs.pop('driver_memory'))
 
@@ -73,6 +77,8 @@ def spark_job(script_file, **kwargs):
     if kwargs['redirect_spark_logs'] is not None:
         spark_job += ' 2>{0}'.format(kwargs.pop('redirect_spark_logs'))
 
+    print(spark_job)
+    
     try: Util.call(spark_job, True)
     except Exception as exc:
         sys.stderr.write('Failed to submit Spark Job!\n')
@@ -118,6 +124,9 @@ def main():
         # .............................add zookeeper's connection string
         state['zkquorum'] = '{0}:{1}'.format(conf['kafka']['zookeper_server'],
                                         conf['kafka']['zookeper_port'])
+
+        print("==========================")
+        print(state)
 
         spark_job('common/listener.py', **state)
 

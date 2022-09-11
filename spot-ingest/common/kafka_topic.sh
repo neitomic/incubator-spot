@@ -45,7 +45,7 @@ case "$ACTION" in
             echo -e $USAGE
             exit 1           
         fi
-        kafka-topics --create --partitions $PARTITIONS --replication-factor 1 --topic $TOPIC --zookeeper $ZK
+        kafka-topics.sh --create --partitions $PARTITIONS --replication-factor 1 --topic $TOPIC --zookeeper $ZK
         ;;
 
     delete)        
@@ -53,7 +53,7 @@ case "$ACTION" in
             echo -e $USAGE
             exit 1
         fi
-        kafka-topics --delete --topic $TOPIC --zookeeper $ZK        
+        kafka-topics.sh --delete --topic $TOPIC --zookeeper $ZK        
         ;;
 
     *)
