@@ -30,7 +30,6 @@ class Reputation(object):
     def check(self, ips=None, urls=None, cat=False):
         self._logger.info("Threat-Exchange reputation check starts...")
         reputation_dict = {}
-        data = []
 
         if ips is not None:
             values = ips
@@ -70,4 +69,3 @@ class Reputation(object):
             return "firehol:SUSPICIOUS:2"
         elif reputation == 'MALICIOUS':
             return "firehol:MALICIOUS:3"
-
