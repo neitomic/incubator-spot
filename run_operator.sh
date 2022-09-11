@@ -2,6 +2,11 @@
 
 data_type=$1
 
+export IMPALA_HOME=/opt/impala
+export KAFKA_HOME=/opt/kafka
+export SPARK_HOME=/opt/spark
+export PATH="$PATH:$KAFKA_HOME/bin:$SPARK_HOME/bin"
+
 # activating environment
 source /opt/impala/bin/impala-config.sh
 source /opt/incubator-spot/spot-ingest/venv/bin/activate
@@ -17,5 +22,3 @@ cd $SPOT_HOME/spot-ml
 
 cd $SPOT_HOME/spot-oa/oa
 python start_oa.py -d $data_date -t $data_type -l 200
-
-
