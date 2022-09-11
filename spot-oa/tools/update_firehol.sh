@@ -15,6 +15,6 @@ update-ipsets
 
 echo "Update local db"
 SPOT_OA_HOME=$SPOT_HOME/spot-oa
-python SPOT_OA_HOME/tools/firehol_reputation_db_create.py --firehol-dir /etc/firehol/ipsets --db-file SPOT_OA_HOME/context/firehol_reputation.db
+python $SPOT_OA_HOME/tools/firehol_reputation_db_create.py --firehol-dir /etc/firehol/ipsets --db-file $SPOT_OA_HOME/context/firehol_reputation.db
 
 
