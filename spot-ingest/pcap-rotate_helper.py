@@ -104,7 +104,7 @@ def _parse_args():
 
     :returns: On success, a namedtuple of Values instances.
     '''
-    parser = ArgumentParser('Apache Spot PCAP file rotate helper', epilog='END')
+    parser = ArgumentParser('Knogin Hunter PCAP file rotate helper', epilog='END')
     required = parser.add_argument_group('mandatory arguments')
 
     # .................................state optional arguments
