@@ -21,6 +21,7 @@ from graphql import (
     GraphQLArgument,
     GraphQLString,
     GraphQLInt,
+    GraphQLFloat,
     GraphQLNonNull,
     GraphQLList,
     GraphQLInputObjectType,
@@ -93,19 +94,19 @@ ThreatDetailsInputType = GraphQLInputObjectType(
             description='Number of connections on a particular day of flow traffic data'
         ),
         'maxPkts': GraphQLInputObjectField(
-            type=GraphQLInt,
+            type=GraphQLFloat,
             description='Maximum number of packets tranferred on a single connection'
         ),
         'avgPkts': GraphQLInputObjectField(
-            type=GraphQLInt,
+            type=GraphQLFloat,
             description='Average number of packets transferred bwteen IPs'
         ),
         'maxBytes': GraphQLInputObjectField(
-            type=GraphQLInt,
+            type=GraphQLFloat,
             description='Maximum number of bytes tranferred on a single connection'
         ),
         'avgBytes': GraphQLInputObjectField(
-            type=GraphQLInt,
+            type=GraphQLFloat,
             description='Average number of bytes transferred bwteen IPs'
         )
     }

@@ -64,22 +64,22 @@ SuspiciousType = GraphQLObjectType(
             resolver=lambda root, *_: root.get('proto')
         ),
         'inPkts': GraphQLField(
-            type=GraphQLInt,
+            type=GraphQLFloat,
             description='Input packets',
             resolver=lambda root, *_: root.get('ipkt') or 0
         ),
         'inBytes': GraphQLField(
-            type=GraphQLInt,
+            type=GraphQLFloat,
             description='Input bytes',
             resolver=lambda root, *_: root.get('ibyt') or 0
         ),
         'outPkts': GraphQLField(
-            type=GraphQLInt,
+            type=GraphQLFloat,
             description='Output packets',
             resolver=lambda root, *_: root.get('opkt') or 0
         ),
         'outBytes': GraphQLField(
-            type=GraphQLInt,
+            type=GraphQLFloat,
             description='Output bytes',
             resolver=lambda root, *_: root.get('obyt') or 0
         ),
@@ -180,12 +180,12 @@ EdgeDetailsType = GraphQLObjectType(
             resolver=lambda root, *_: root.get('tos')
         ),
         'inBytes': GraphQLField(
-            type=GraphQLInt,
+            type=GraphQLFloat,
             description='Input bytes',
             resolver=lambda root, *_: root.get('ibyt') or 0
         ),
         'inPkts': GraphQLField(
-            type=GraphQLInt,
+            type=GraphQLFloat,
             description='Input packets',
             resolver=lambda root, *_: root.get('ipkt') or 0
         ),
@@ -205,12 +205,12 @@ EdgeDetailsType = GraphQLObjectType(
             resolver=lambda root, *_: root.get('rip')
         ),
         'outBytes': GraphQLField(
-            type=GraphQLInt,
+            type=GraphQLFloat,
             description='Output bytes',
             resolver=lambda root, *_: root.get('obyt') or 0
         ),
         'outPkts': GraphQLField(
-            type=GraphQLInt,
+            type=GraphQLFloat,
             description='Output packets',
             resolver=lambda root, *_: root.get('opkt') or 0
         )
@@ -231,12 +231,12 @@ IpConnectionDetailsType = GraphQLObjectType(
             resolver=lambda root, *_: root.get('dstip')
         ),
         'inBytes': GraphQLField(
-            type=GraphQLInt,
+            type=GraphQLFloat,
             description='Input bytes',
             resolver=lambda root, *_: root.get('ibyt') or 0
         ),
         'inPkts': GraphQLField(
-            type=GraphQLInt,
+            type=GraphQLFloat,
             description='Input packets',
             resolver=lambda root, *_: root.get('ipkt') or 0
         )
@@ -318,22 +318,22 @@ ThreatDetailsType = GraphQLObjectType(
             resolver=lambda root, *_: root.get('conns')
         ),
         'maxPkts': GraphQLField(
-            type=GraphQLInt,
+            type=GraphQLFloat,
             description='Maximum number of packets tranferred on a single connection',
             resolver=lambda root, *_: root.get('maxpkts')
         ),
         'avgPkts': GraphQLField(
-            type=GraphQLInt,
+            type=GraphQLFloat,
             description='Average number of packets transferred bwteen IPs',
             resolver=lambda root, *_: root.get('avgpkts')
         ),
         'maxBytes': GraphQLField(
-            type=GraphQLInt,
+            type=GraphQLFloat,
             description='Maximum number of bytes tranferred on a single connection',
             resolver=lambda root, *_: root.get('maxbyts')
         ),
         'avgBytes': GraphQLField(
-            type=GraphQLInt,
+            type=GraphQLFloat,
             description='Average number of bytes transferred bwteen IPs',
             resolver=lambda root, *_: root.get('avgbyts')
         )
@@ -505,12 +505,12 @@ TimelineType = GraphQLObjectType(
             resolver=lambda root, *_: root.get('dport')
         ),
         'pkts': GraphQLField(
-            type=GraphQLNonNull(GraphQLInt),
+            type=GraphQLNonNull(GraphQLFloat),
             description='Packets tranferred between IPs',
             resolver=lambda root, *_: root.get('ipkt')
         ),
         'bytes': GraphQLField(
-            type=GraphQLNonNull(GraphQLInt),
+            type=GraphQLNonNull(GraphQLFloat),
             description='Bytes tranferred between IPs',
             resolver=lambda root, *_: root.get('ibyt')
         )
