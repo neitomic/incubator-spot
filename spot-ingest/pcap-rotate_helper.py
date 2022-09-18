@@ -55,7 +55,7 @@ class PCAPRotateHelper:
 
                         print "trying to find older file to clean up"
                         to_delete_file_name = self.find_previous_file(previous_filename)
-                        to_delete_file = os.path.join(dirname(_file), to_delete_file_name)
+                        to_delete_file = os.path.join(self._dst_dir, to_delete_file_name)
                         if os.path.isfile(to_delete_file):
                             print "deleting old file: {}".format(to_delete_file)
                             os.remove(to_delete_file)
