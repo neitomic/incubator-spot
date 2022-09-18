@@ -222,7 +222,7 @@ def file_exists(hdfs_path, file_name, client=None):
     if not client:
         client = get_client()
 
-    files = list_dir(client, hdfs_path)
+    files = list_dir(hdfs_path, client=client)
     if str(file_name) in files:
         return True
     else:
