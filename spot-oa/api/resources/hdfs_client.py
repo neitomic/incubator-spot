@@ -177,7 +177,8 @@ def put_file_json(hdfs_file_content,hdfs_path,hdfs_file_name,append_file=False,o
         with client.write(hdfs_full_name,append=append_file,overwrite=overwrite_file,encoding='utf-8') as writer:
             dump(hdfs_file_content, writer)
         return True
-    except HdfsError:
+    except HdfsError as e:
+        print e
         return False
 
 
